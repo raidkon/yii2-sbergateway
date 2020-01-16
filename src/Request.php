@@ -21,10 +21,10 @@ use yii\base\InvalidConfigException;
  */
 class Request extends BaseObject
 {
-    public const METHOD_REGISTER_DO = 'register.do';
-    public const METHOD_ORDER_STATUS_EXTENDED = 'getOrderStatusExtended.do';
-    public const METHOD_ORDER_BINDING = 'paymentOrderBinding.do';
-    public const METHOD_PAYMENT_DO = 'payment.do';
+    public const METHOD_REGISTER_DO = 'rest/register.do';
+    public const METHOD_ORDER_STATUS_EXTENDED = 'rest/getOrderStatusExtended.do';
+    public const METHOD_ORDER_BINDING = 'rest/paymentOrderBinding.do';
+    public const METHOD_APPLE_PAYMENT_DO = 'applepay/payment.do';
     
     protected $method = null;
     protected $data = [];
@@ -45,7 +45,7 @@ class Request extends BaseObject
             self::METHOD_REGISTER_DO => 'Запрос регистрации заказа',
             self::METHOD_ORDER_STATUS_EXTENDED => 'Расширенный запрос состояния заказа',
             self::METHOD_ORDER_BINDING => 'Запрос проведения платежа по связкам',
-            self::METHOD_PAYMENT_DO => 'Запрос оплаты через Apple Pay/Samsung Pay/Google Pay',
+            self::METHOD_APPLE_PAYMENT_DO => 'Запрос оплаты через Apple Pay',
         ];
     }
     

@@ -16,7 +16,6 @@ use yii\base\BootstrapInterface;
 use yii\base\InvalidConfigException;
 use yii\console\Application as ConsoleApp;
 use yii\helpers\Inflector;
-use yii\web\Application as WebApp;
 
 class GateWay extends BaseObject implements BootstrapInterface
 {
@@ -24,8 +23,8 @@ class GateWay extends BaseObject implements BootstrapInterface
     public const MODE_TEST = 'test';
     
     public $urlGateway = [
-        GateWay::MODE_PRODUCTION => 'https://securepayments.sberbank.ru/payment/rest/',
-        GateWay::MODE_TEST => 'https://3dsec.sberbank.ru/payment/rest/',
+        GateWay::MODE_PRODUCTION => 'https://securepayments.sberbank.ru/payment/',
+        GateWay::MODE_TEST => 'https://3dsec.sberbank.ru/payment/',
     ];
     
     public $mode = GateWay::MODE_TEST;

@@ -1,23 +1,29 @@
 {
-    "name": "raidkon/yii2-sbergateway",
-    "type": "library",
-    "require": {
-        "yiisoft/yii2-queue": "^2.0"
-    },
-    "support": {
-        "issues": "https://github.com/raidkon/yii2-sbergateway/issues",
-        "source": "https://github.com/raidkon/yii2-sbergateway"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Никита Медведев",
-            "email": "n@raidkon.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "raidkon\\yii2\\sbergateway\\":"src/"
-        }
+  "name": "raidkon/yii2-sbergateway",
+  "type": "library",
+  "require": {
+    "yiisoft/yii2-queue": "^2.0"
+  },
+  "support": {
+    "issues": "https://github.com/raidkon/yii2-sbergateway/issues",
+    "source": "https://github.com/raidkon/yii2-sbergateway"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Никита Медведев",
+      "email": "n@raidkon.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "raidkon\\yii2\\sbergateway\\": "src/"
+    }
+  },
+  "version": "0.0.2",
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.0.2-dev"
+    }
+  }
 }

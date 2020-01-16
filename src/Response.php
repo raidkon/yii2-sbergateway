@@ -10,7 +10,6 @@ namespace raidkon\yii2\sbergateway;
 
 
 use RuntimeException;
-use Yii;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 
@@ -97,7 +96,7 @@ class Response extends BaseObject
      */
     public function getError(): ?array
     {
-        return $this->errors;
+        return $this->error;
     }
     
     /**

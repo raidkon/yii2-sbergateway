@@ -62,7 +62,7 @@ class Executer extends BaseObject
         
         try {
     
-            if ($this->request->method == Request::METHOD_PAYMENT_DO) {
+            if ($this->request->method == Request::METHOD_APPLE_PAYMENT_DO) {
                 $this->request->setData('merchant', $this->component->authUserName);
             } else {
                 $this->request->setData('userName', $this->component->authUserName);
@@ -78,7 +78,10 @@ class Executer extends BaseObject
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => http_build_query($sendData),
-                CURLOPT_SSL_VERIFYHOST => $this->component->mode === GateWay::MODE_TEST ? 0 : 2
+                CURLOPT_SSL_VERIFYHOST => $this->component->mode === GateWay::MODE_TEST ? 0 : 2,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json'
+                ]
             ]);
             $response = curl_exec($curl);
             $info = curl_getinfo($curl);
@@ -118,7 +121,13 @@ class Executer extends BaseObject
                 }
         
                 return new Response([
-                    'error' => ['text' => "Ошибка парсинга JSON", 'code' => Response::ERROR_JSON, 'json_error' => $error, 'json_errno' => $errno],
+                    'error' => [
+                        'text' => "Ошибка парсинга JSON",
+                        'code' => Response::ERROR_JSON,
+                        'json_error' => $error,
+                        'json_errno' => $errno,
+                        'response' => $response
+                    ],
                     'data' => $response,
                     'info' => $info,
                     'sendData' => $sendData
