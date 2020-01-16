@@ -1,5 +1,6 @@
 {
   "name": "raidkon/yii2-sbergateway",
+  "description": "Lib connect to sberbank",
   "type": "library",
   "require": {
     "yiisoft/yii2-queue": "^2.0"
