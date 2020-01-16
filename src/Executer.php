@@ -9,10 +9,9 @@
 namespace raidkon\yii2\sbergateway;
 
 
-use yii\base\BaseObject;
 use Exception;
+use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
-use yii\debug\models\timeline\Svg;
 
 class Executer extends BaseObject
 {
@@ -63,10 +62,14 @@ class Executer extends BaseObject
         
         try {
     
-            $this->request->setData('userName', $this->component->authUserName);
-            $this->request->setData('password', $this->component->authPassword);
-            
-            
+            if ($this->request->method == Request::METHOD_PAYMENT_DO) {
+                $this->request->setData('merchant', $this->component->authUserName);
+            } else {
+                $this->request->setData('userName', $this->component->authUserName);
+                $this->request->setData('password', $this->component->authPassword);
+            }
+    
+    
             $url = $this->createUrl();
             $sendData = $this->request->data;
     
@@ -130,7 +133,7 @@ class Executer extends BaseObject
             ]);
         } catch (Exception $e) {
             return new Response([
-                'error' => ['text' => "Не предвиденная ошибка", 'code' => Response::ERROR_EXCEPTION, 'json_error' => $e->getMessage(), 'json_errno' => $e->getCode(),'trace' => $e->getTraceAsString()],
+                'error' => ['text' => "Не предвиденная ошибка", 'code' => Response::ERROR_EXCEPTION, 'json_error' => $e->getMessage(), 'json_errno' => $e->getCode(), 'trace' => $e->getTraceAsString()],
             ]);
         }
     }

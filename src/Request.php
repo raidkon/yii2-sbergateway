@@ -17,20 +17,18 @@ use yii\base\InvalidConfigException;
  * @package raidkon\yii2\sbergateway
  *
  * @property string $method
- * @property string $data
+ * @property array $data
  */
 class Request extends BaseObject
 {
     public const METHOD_REGISTER_DO = 'register.do';
     public const METHOD_ORDER_STATUS_EXTENDED = 'getOrderStatusExtended.do';
     public const METHOD_ORDER_BINDING = 'paymentOrderBinding.do';
+    public const METHOD_PAYMENT_DO = 'payment.do';
     
-    protected $method;
+    protected $method = null;
     protected $data = [];
     
-    /**
-     * @return mixed
-     */
     public function getData(): array
     {
         return $this->data;
@@ -47,21 +45,15 @@ class Request extends BaseObject
             self::METHOD_REGISTER_DO => 'Запрос регистрации заказа',
             self::METHOD_ORDER_STATUS_EXTENDED => 'Расширенный запрос состояния заказа',
             self::METHOD_ORDER_BINDING => 'Запрос проведения платежа по связкам',
+            self::METHOD_PAYMENT_DO => 'Запрос оплаты через Apple Pay/Samsung Pay/Google Pay',
         ];
     }
     
-    /**
-     * @return mixed
-     */
-    public function getMethod(): string
+    public function getMethod(): ?string
     {
         return $this->method;
     }
     
-    /**
-     * @param mixed $method
-     * @throws InvalidConfigException
-     */
     public function setMethod(string $method): void
     {
         if (!key_exists($method, static::getMethods())) {
