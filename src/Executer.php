@@ -17,10 +17,10 @@ class Executer extends BaseObject
 {
     /** @var Request */
     protected $request;
-    
+
     /** @var GateWay */
     protected $component;
-    
+
     /**
      * Executer constructor.
      * @param array $config
@@ -33,7 +33,16 @@ class Executer extends BaseObject
             throw new InvalidConfigException("Require attr: component");
         }
     }
-    
+
+    private static function getMethodIsMerchant(): array
+    {
+        return [
+            Request::METHOD_APPLE_PAYMENT_DO,
+            Request::METHOD_GOOGLE_PAYMENT_DO,
+            Request::METHOD_SAMSUNG_PAYMENT_DO
+        ];
+    }
+
     /**
      * @param GateWay $component
      */
@@ -41,7 +50,7 @@ class Executer extends BaseObject
     {
         $this->component = $component;
     }
-    
+
     /**
      * @param Request $request
      */
@@ -49,7 +58,7 @@ class Executer extends BaseObject
     {
         $this->request = $request;
     }
-    
+
     /**
      * @return Response
      * @throws InvalidConfigException
@@ -59,20 +68,20 @@ class Executer extends BaseObject
         if (!$this->component->authUserName || !$this->component->authPassword) {
             throw new InvalidConfigException("У компонента Sberbank (id: " . $this->component->getComponentId() . ') не установлен параметры авторизации');
         }
-        
+
         try {
-    
-            if ($this->request->method == Request::METHOD_APPLE_PAYMENT_DO) {
+
+            if (in_array($this->request->method, static::getMethodIsMerchant())) {
                 $this->request->setData('merchant', $this->component->authUserName);
             } else {
                 $this->request->setData('userName', $this->component->authUserName);
                 $this->request->setData('password', $this->component->authPassword);
             }
-    
-    
+
+
             $url = $this->createUrl();
             $sendData = $this->request->data;
-    
+
             $curl = curl_init($url);
             curl_setopt_array($curl, [
                 CURLOPT_RETURNTRANSFER => true,
@@ -96,9 +105,9 @@ class Executer extends BaseObject
                 ]);
             }
             $json = @json_decode($response, 1);
-    
+
             if (($errno = json_last_error()) !== JSON_ERROR_NONE) {
-        
+
                 switch ($errno) {
                     case JSON_ERROR_DEPTH:
                         $error = 'Достигнута максимальная глубина стека';
@@ -119,7 +128,7 @@ class Executer extends BaseObject
                         $error = 'Неизвестная ошибка';
                         break;
                 }
-        
+
                 return new Response([
                     'error' => [
                         'text' => "Ошибка парсинга JSON",
@@ -133,8 +142,8 @@ class Executer extends BaseObject
                     'sendData' => $sendData
                 ]);
             }
-    
-    
+
+
             return new Response([
                 'data' => $json,
                 'info' => $info,
@@ -142,11 +151,17 @@ class Executer extends BaseObject
             ]);
         } catch (Exception $e) {
             return new Response([
-                'error' => ['text' => "Не предвиденная ошибка", 'code' => Response::ERROR_EXCEPTION, 'json_error' => $e->getMessage(), 'json_errno' => $e->getCode(), 'trace' => $e->getTraceAsString()],
+                'error' => [
+                    'text' => "Не предвиденная ошибка",
+                    'code' => Response::ERROR_EXCEPTION,
+                    'json_error' => $e->getMessage(),
+                    'json_errno' => $e->getCode(),
+                    'trace' => $e->getTraceAsString()
+                ],
             ]);
         }
     }
-    
+
     protected function createUrl()
     {
         return $this->component->getActualUrl() . $this->request->method;
