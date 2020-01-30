@@ -78,19 +78,24 @@ class Executer extends BaseObject
                 $this->request->setData('password', $this->component->authPassword);
             }
 
+            $sendData = $this->request->data;
+
 
             $url = $this->createUrl();
-            $sendData = $this->request->data;
+            if ($sendData) {
+                if (strpos($url, '?') !== false) {
+                    $url .= '&';
+                } else {
+                    $url .= '?';
+                }
+                $url .= http_build_query($sendData);
+            }
 
             $curl = curl_init($url);
             curl_setopt_array($curl, [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => http_build_query($sendData),
                 CURLOPT_SSL_VERIFYHOST => $this->component->mode === GateWay::MODE_TEST ? 0 : 2,
-                CURLOPT_HTTPHEADER => [
-                    'Content-Type: application/json'
-                ]
             ]);
             $response = curl_exec($curl);
             $info = curl_getinfo($curl);
